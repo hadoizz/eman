@@ -14,13 +14,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: Remove unnecessary directories
+      run: |
+        if [ -d "/usr/share/dotnet" ]; then
+          sudo rm -rf /usr/share/dotnet
+        fi
+        if [ -d "$AGENT_TOOLSDIRECTORY" ]; then
+          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+        fi
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
-      
-    - name: Free disk space
-      run: |
-        sudo swapoff -a
-        sudo rm -f /swapfile
-        sudo apt clean
-        docker rmi $(docker image ls -aq)
-        df -h
