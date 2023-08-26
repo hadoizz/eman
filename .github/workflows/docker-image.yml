@@ -9,16 +9,15 @@ on:
 jobs:
 
   build:
-    - name: free disk space
+
+    runs-on: ubuntu-latest
+ - name: free disk space
       run: |
         sudo swapoff -a
         sudo rm -f /swapfile
         sudo apt clean
         docker rmi $(docker image ls -aq)
         df -h
-        
-    runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
