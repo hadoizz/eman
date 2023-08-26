@@ -11,14 +11,16 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
- - name: free disk space
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+      
+    - name: Free disk space
       run: |
         sudo swapoff -a
         sudo rm -f /swapfile
         sudo apt clean
         docker rmi $(docker image ls -aq)
         df -h
-    steps:
-    - uses: actions/checkout@v3
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
